@@ -25,9 +25,10 @@ Open-source Discord music bot that streams audio from YouTube, SoundCloud, and d
 
 ### Prerequisites
 
-- Node.js 20 LTS+
+- Node.js 22 LTS+
 - `yt-dlp` installed and on PATH
-- `ffmpeg` installed and on PATH
+
+> **FFmpeg note:** RuneBeats bundles FFmpeg via the [`ffmpeg-static`](https://www.npmjs.com/package/ffmpeg-static) npm package, so a separate system install is **not required**. If you already have a system FFmpeg with the `libopus` encoder, the setup script will detect it and prefer it (some `ffmpeg-static` builds lack `libopus`).
 
 ### Install yt-dlp
 
@@ -38,19 +39,6 @@ sudo chmod +x /usr/local/bin/yt-dlp
 
 # Windows (scoop)
 scoop install yt-dlp
-```
-
-### Install FFmpeg
-
-```bash
-# Ubuntu/Debian
-sudo apt install ffmpeg
-
-# macOS (Homebrew)
-brew install ffmpeg
-
-# Windows (scoop)
-scoop install ffmpeg
 ```
 
 ### Setup
@@ -67,10 +55,13 @@ npm install
 cp .env.example .env
 # Edit .env with your credentials (see below)
 
-# 4. Register slash commands
+# 4. Validate your environment (checks Node, deps, yt-dlp, ffmpeg, .env)
+node setup_environment.js
+
+# 5. Register slash commands
 npm run deploy
 
-# 5. Start the bot
+# 6. Start the bot
 npm start
 ```
 
@@ -130,9 +121,9 @@ npm start
 The bot runs perfectly on Oracle's **VM.Standard.E2.1.Micro** (1 vCPU, 1 GB RAM) — permanently free.
 
 ```bash
-# On the VM, install dependencies
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs ffmpeg
+# On the VM, install dependencies (FFmpeg is bundled via ffmpeg-static — no apt install needed)
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs
 sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
 sudo chmod +x /usr/local/bin/yt-dlp
 sudo npm install -g pm2
@@ -143,6 +134,7 @@ cd runebeats
 npm install
 cp .env.example .env
 # fill in .env...
+node setup_environment.js
 npm run deploy
 pm2 start src/index.js --name runebeats
 pm2 startup   # auto-restart after VM reboots

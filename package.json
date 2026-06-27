@@ -27,7 +27,6 @@
     "ffmpeg-static": "^5.2.0",
     "opusscript": "^0.0.8",
     "sodium-native": "^4.3.3",
-    "sodium-native": "^4.3.3",
     "soundcloud-downloader": "^1.0.0",
     "undici": "^7.26.0",
     "ytdl-core": "^4.11.5"
